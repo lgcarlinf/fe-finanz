@@ -13,7 +13,7 @@ export const DashboardLayout = ({ children }: PropsWithChildren) => {
             case "graphics":
                 return <div>Finance</div>;
             default:
-                return <Graphics />;
+                return
         }
     };
 

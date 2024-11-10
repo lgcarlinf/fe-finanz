@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AUTH_KEY, authApi } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -14,6 +15,15 @@ export const useAuth = () => {
     retry: false,
     staleTime: Infinity,
     enabled: hasToken,
+    throwOnError(error: AxiosError) {
+      if (error.status === 401) {
+        localStorage.removeItem("token");
+        queryClient.setQueryData([AUTH_KEY], null);
+        navigate("/login");
+        return false;
+      }
+      return true;
+    },
   });
 
   const loginMutation = useMutation({

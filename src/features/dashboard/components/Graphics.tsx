@@ -12,6 +12,7 @@ import {
     Legend,
     ArcElement,
 } from "chart.js";
+import { useFinanceSummary } from "../hooks/useFinanceSummary";
 
 ChartJS.register(
     CategoryScale,
@@ -24,35 +25,43 @@ ChartJS.register(
     ArcElement
 );
 
-export const Graphics = ({ incomeData, expendData }) => {
+export const Graphics = () => {
+
+    const { financeSummary } = useFinanceSummary()
+
+    const incomeData = financeSummary?.incomes;
+    const expendData = financeSummary?.expenses;
+
     const dates = useMemo(
-        () => incomeData?.map((entry) => entry.date),
+        () => incomeData?.map((entry) =>
+            new Date(entry.updatedAt).toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit'
+            })
+        ),
         [incomeData]
     );
     const incomeAmounts = useMemo(
-        () => incomeData?.map((entry) => parseFloat(entry.amount || 0)),
+        () => incomeData?.map((entry) => entry.ammount || 0),
         [incomeData]
     );
     const expendAmounts = useMemo(
-        () => expendData?.map((entry) => parseFloat(entry.amount || 0)),
+        () => expendData?.map((entry) => entry.ammount || 0),
         [expendData]
     );
     const profitAmounts = useMemo(
         () =>
-            incomeAmounts?.map((income, index) => income - expendAmounts[index] || 0),
+            incomeAmounts?.map((income, index) => income - (expendAmounts?.[index] ?? 0) || 0),
         [incomeAmounts, expendAmounts]
     );
 
-    const totalIncome = incomeAmounts?.reduce((a, b) => a + b, 0);
-    const totalExpend = expendAmounts?.reduce((a, b) => a + b, 0);
-    const totalProfit = profitAmounts?.reduce((a, b) => a + b, 0);
-
     const incomeNames = useMemo(
-        () => incomeData?.map((entry) => entry.name),
+        () => incomeData?.map((entry) => entry.description),
         [incomeData]
     );
     const expendNames = useMemo(
-        () => expendData?.map((entry) => entry.name),
+        () => expendData?.map((entry) => entry.description),
         [expendData]
     );
 
@@ -60,14 +69,10 @@ export const Graphics = ({ incomeData, expendData }) => {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: { position: "top" },
+            legend: { position: "top" as const },
             title: {
                 display: true,
-                text: `Ingresos: ${totalIncome?.toFixed(
-                    2
-                )}  |  Egresos: ${totalExpend?.toFixed(
-                    2
-                )}  |  Ganancias: ${totalProfit?.toFixed(2)}`,
+                text: `Ingresos: ${financeSummary?.total.totalIncome}  |  Egresos: ${financeSummary?.total.totalExpense}  |  Ganancias: ${financeSummary?.profit}`,
             },
         },
         layout: {
@@ -80,7 +85,7 @@ export const Graphics = ({ incomeData, expendData }) => {
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: "bottom",
+                position: "bottom" as const,
                 labels: {
                     font: {
                         size: 10,

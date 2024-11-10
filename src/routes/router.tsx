@@ -1,10 +1,10 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { QueryClient } from "@tanstack/react-query";
 import { ProtectedRoute } from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import { Login } from "../features/auth/pages/Login";
+import Dashboard from "../features/dashboard/pages/Dashboard";
 
-export const createAppRouter = (queryClient: QueryClient) => {
+export const createAppRouter = () => {
   return createBrowserRouter([
     {
       path: '/',
@@ -29,7 +29,7 @@ export const createAppRouter = (queryClient: QueryClient) => {
           children: [
             {
               path: 'dashboard',
-              element: <div>Autenticado</div>,
+              element: <Dashboard />
             },
           ],
         },

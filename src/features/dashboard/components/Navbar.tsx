@@ -30,7 +30,7 @@ export const Navbar = () => {
                     />
                 </div>
 
-                {user && <h1 className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-bold ">{`¡Bienvenido, ${user?.name}!`}</h1>}
+                {user && <h1 className="absolute left-1/2 transform -translate-x-1/2 text-2xl font-bold ">{`¡Bienvenido, ${user.name}!`}</h1>}
 
                 <div className="flex justify-center items-center">
                     <button type="button" className="relative">

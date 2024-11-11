@@ -1,12 +1,14 @@
 
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../features/auth/hooks/useAuth';
+import { Spinner } from '../features/shared/components/Spinner';
+
 
 const PublicRoute = () => {
     const { isAuthenticated, isLoading } = useAuth();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Spinner />
     }
 
     if (isAuthenticated) {

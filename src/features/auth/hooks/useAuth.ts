@@ -38,16 +38,11 @@ export const useAuth = () => {
   const registerMutation = useMutation({
     mutationFn: authApi.register,
     onSuccess: (data) => {
+      localStorage.setItem("token", data.token);
       queryClient.setQueryData(AUTH_KEY, data);
+      navigate("/dashboard");
     },
   });
-
-  /*   const checkTokenMutation = useMutation({
-    mutationFn: authApi.checkAuth,
-    onSuccess: (data) => {
-      queryClient.setQueryData(AUTH_KEY, data);
-    },
-  }); */
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -61,7 +56,6 @@ export const useAuth = () => {
     isLoading,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
-    /*     checkAuth: checkTokenMutation.mutateAsync, */
     logout,
     isAuthenticated: !!auth,
   };

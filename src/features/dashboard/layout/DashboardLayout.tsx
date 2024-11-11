@@ -1,9 +1,9 @@
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import { Navbar } from "../components/Navbar"
 import { IconType, Sidebar } from "../components/Sidebar"
 import { Graphics } from "../components/Graphics";
 
-export const DashboardLayout = ({ children }: PropsWithChildren) => {
+export const DashboardLayout = () => {
 
     const [activePage, setActivePage] = useState<IconType>("home" as IconType);
     const renderContent = () => {
